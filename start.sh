@@ -1,0 +1,1 @@
+nohup python3 -u httpServer.py > nohup.out 2>&1 &

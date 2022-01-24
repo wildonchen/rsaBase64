@@ -1,0 +1,46 @@
+#!coding=UTF-8
+
+# ------------------------------------------------------------------
+# Title        RSA+BASE64加解密方法
+# Author    chenqiwei
+# Created   2021/12/24
+# Update    2021/12/24
+# ------------------------------------------------------------------
+
+import rsa,base64 
+
+class rsaBase64:
+    '''rsa+base64 加解密'''
+    def encode(str,pubkey):
+        '''rsa加密'''
+        pubkey='''
+        -----BEGIN RSA PUBLIC KEY-----
+        '''+pubkey+'''
+        -----END RSA PUBLIC KEY-----
+        '''
+        pubkey = rsa.PublicKey.load_pkcs1(pubkey.encode())
+        content = str.encode("utf-8")
+        crypto = rsa.encrypt(content, pubkey)
+        return base64.b64encode(crypto).decode("utf-8")
+ 
+    def decode(str, privkey):
+        '''rsa解密'''
+        privkey='''
+        -----BEGIN RSA PRIVATE KEY-----
+        '''+privkey+'''
+        -----END RSA PRIVATE KEY-----
+        '''
+        privkey = rsa.PrivateKey.load_pkcs1(privkey.encode())
+        str=base64.b64decode(str)
+        content = rsa.decrypt(str, privkey)
+        return  content.decode("utf-8")
+ 
+if __name__ == "__main__":
+    postPubkey='MEgCQQCynDyxy1net4tM6jKIHKW1THrUK5khRhVm5q4L+xAHxOb6KKphSH4OYWpvcD7Y9Bd7Yizky3NW51wXOeUjyjcfAgMBAAE='
+    postPrivkey='MIIBPwIBAAJBALKcPLHLWd63i0zqMogcpbVMetQrmSFGFWbmrgv7EAfE5vooqmFIfg5ham9wPtj0F3tiLOTLc1bnXBc55SPKNx8CAwEAAQJBAIdzrx/SrKwXm//PmFTbDNxKTNg83Bt8z9xC0vlpA0SMfF+695oxYYSc6d1qjyjYlzkX6WzDcniHO45ubN2KZekCIwD/Vqua7hlYny7h02DlkCONcHW2Oe8LsVCgS3UrISGtbN3FAh8AsxKvEDFgbnXbtYw4FN0SrRKs+yG4Jo5YfDK+4FOTAiMAz6d6s+sDLfF3PSyc1tUcNMDK2kHPSGERwurbBRJSwymQSQIfAIqKZvRhLxjmh+/CJtVFYCCUdU3pfX4e3Khh3jjRjwIjAJ5Nwul3H7mgP3OFbEGq3Fan+NVpxRTbKGVffNNaNhQ+af8='
+
+    str= rsaBase64.encode("hello",postPubkey)
+    print("encrypt: %s" % str)
+
+    content = rsaBase64.decode(str, postPrivkey)
+    print("rsaDecrypt: %s" % content)
