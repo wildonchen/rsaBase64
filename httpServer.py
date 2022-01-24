@@ -33,10 +33,7 @@ class MyHttpHandler(BaseHTTPRequestHandler):
 
     def notFound(self):
         '''输出404'''
-        f = open(os.getcwd()+'readme.json','rb')
-        readme=f.read()
-        f.close()
-        self.writeJson(404,json.loads(readme),'路径不存在')
+        self.writeJson(404,'','路径不存在')
 
     def getPostValue(self,data,key):
         '''获取请求头的post值'''
