@@ -74,7 +74,6 @@ class MyHttpHandler(BaseHTTPRequestHandler):
                     if postUrlcode=='get':
                         content= rsaBase64.encode(postContent,postKey) #加密
                         content=urllib.parse.quote(content,'utf-8')
-                        content=urllib.parse.quote(content,'utf-8')#云盟专用，双重url编码
                     elif postUrlcode=='true':
                         postContent=urllib.parse.quote(postContent,'utf-8')
                     else:
@@ -84,8 +83,6 @@ class MyHttpHandler(BaseHTTPRequestHandler):
                     content= {"content":content} 
                 elif keyType=="privkey":
                     postContent=urllib.parse.unquote(postContent,'utf-8') #url解码，解决get传参产生的url编码
-                    if postUrlcode=='get':
-                        postContent=urllib.parse.unquote(postContent,'utf-8')  #云盟专用，双重url解码
                     try:
                         content=urllib.parse.unquote(rsaBase64.decode(postContent,postKey)) #解密后，先url解码
                     except:
